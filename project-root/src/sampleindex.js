@@ -1,62 +1,77 @@
 const express = require("express");
 
-const port = 3000;
-
-let nextId = 1;
-const students = [
-    {id: nextId++, name: "Reign", course: "BSCS"},
-    {id: nextId++, name: "Jepayb", course: "BSCS"},
-    {id: nextId++, name: "Jason", course: "BSCS"},
-];
-
 const app = express();
+const port = 3000;
 
 app.use(express.json());
 
-app.post("/students", (request, response) => {
-    const newName = response.body.name;
-    const newCourse = request.body.course;
+let nextId = 1;
+let students = [
+  { id: nextId++, name: "Reign", course: "BSCS" },
+  { id: nextId++, name: "Jepayb", course: "BSCS" },
+  { id: nextId++, name: "Jason", course: "BSCS" },
+];
 
-    const newStudent = {id: nextId++, name: newName, course: newCourse};
-
-    students.push(newStudent);
-
-    response.send(newStudent);
+// GET /students - Fetch all students
+app.get("/students", (req, res) => {
+  res.status(200).json(students);
 });
 
-app.get("/students", (request, response) => {
-    const newName = response.body.name;
-    const newCourse = request.body.course;
+// GET /students/:id - Fetch a single student by ID
+app.get("/students/:id", (req, res) => {
+  const studentId = parseInt(req.params.id, 10);
+  const student = students.find((s) => s.id === studentId);
 
-    const newStudent = {id: nextId++, name: newName, course: newCourse};
+  if (!student) {
+    return res.status(404).json({ message: "Student not found" });
+  }
 
-    students.push(newStudent);
-
-    response.send(newStudent);
+  res.status(200).json(student);
 });
 
-app.put("/students", (request, response) => {
-    const newName = response.body.name;
-    const newCourse = request.body.course;
+// POST /students - Create a new student
+app.post("/students", (req, res) => {
+  const { name, course } = req.body;
 
-    const newStudent = {id: nextId++, name: newName, course: newCourse};
+  if (!name || !course) {
+    return res.status(400).json({ message: "Name and course are required" });
+  }
 
-    students.push(newStudent);
+  const newStudent = { id: nextId++, name, course };
+  students.push(newStudent);
 
-    response.send(newStudent);
+  res.status(201).json(newStudent);
 });
 
-app.delete("/students", (request, response) => {
-    const newName = response.body.name;
-    const newCourse = request.body.course;
+// PUT /students/:id - Update an existing student by ID
+app.put("/students/:id", (req, res) => {
+  const studentId = parseInt(req.params.id, 10);
+  const student = students.find((s) => s.id === studentId);
 
-    const newStudent = {id: nextId++, name: newName, course: newCourse};
+  if (!student) {
+    return res.status(404).json({ message: "Student not found" });
+  }
 
-    students.push(newStudent);
+  const { name, course } = req.body;
+  if (name) student.name = name;
+  if (course) student.course = course;
 
-    response.send(newStudent);
+  res.status(200).json(student);
 });
 
-app.listen(3000, () => {
-    console.log("App is listening to port 3000");
+// DELETE /students/:id - Delete a student by ID
+app.delete("/students/:id", (req, res) => {
+  const studentId = parseInt(req.params.id, 10);
+  const index = students.findIndex((s) => s.id === studentId);
+
+  if (index === -1) {
+    return res.status(404).json({ message: "Student not found" });
+  }
+
+  const deletedStudent = students.splice(index, 1)[0];
+  res.status(200).json(deletedStudent);
+});
+
+app.listen(port, () => {
+  console.log(`App is listening on port ${port}`);
 });
