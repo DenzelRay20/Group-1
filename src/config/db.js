@@ -1,7 +1,8 @@
 const { Pool } = require("pg");
 require("dotenv").config();
 
-
+// If DATABASE_URL is provided (e.g. by a hosting provider like Render/Railway/Supabase),
+// use it directly. Otherwise fall back to the individual DB_* variables.
 const pool = process.env.DATABASE_URL
   ? new Pool({
       connectionString: process.env.DATABASE_URL,

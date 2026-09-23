@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const studentRoutes = require("./src/routes/studentRoutes");
+const authRoutes = require("./src/routes/authRoutes");
 const pool = require("./src/config/db");
 
 const app = express();
@@ -13,6 +14,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/students", studentRoutes);
+app.use("/auth", authRoutes);
 
 // Verify the PostgreSQL connection on startup so config problems fail loudly
 pool
