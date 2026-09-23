@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
-// A basic route nyaaa
+// A basic route
 app.get('/', (req, res) => {
   res.send('Hello, World! Express is working.');
 });

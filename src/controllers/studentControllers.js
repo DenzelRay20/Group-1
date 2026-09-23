@@ -1,3 +1,5 @@
+// Controllers now delegate all data access to the async, database-backed
+// functions in studentModels.js instead of mutating an in-memory array.
 const {
     getAllStudents: getAllStudentsFromDb,
     getStudentById: getStudentByIdFromDb,

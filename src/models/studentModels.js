@@ -1,3 +1,7 @@
+// This model used to store students in a plain in-memory array (lost on every
+// restart). It now reads and writes the real PostgreSQL "students" table via
+// the pool configured in src/config/db.js. Run src/config/schema.sql once
+// against your database before starting the server.
 const pool = require('../config/db');
 
 const getAllStudents = async () => {
